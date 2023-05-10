@@ -22,7 +22,7 @@ def uniform_from_ball(
 
 
 def init_thm3(layer: Tensor, layer_idx: int, init_max_norm: float = .5, **kwargs) -> Tensor:
-    assert layer_idx in (0, 1)
+    assert layer_idx in {0, 1}
     with torch.no_grad():
         if layer_idx == 0:
             layer = uniform_from_ball(layer, init_max_norm=init_max_norm)

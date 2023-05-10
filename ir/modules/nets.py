@@ -48,18 +48,17 @@ class DFFNet(_Net):
         self._shape_wo_bias: Optional[Tuple[int, ...]] = shape_wo_bias
         self._init_fn: Callable = init_fn
         self._has_bias: Optional[bool] = has_bias
-        self._layers: List[nn.Linear] = list()
+        self._layers: List[nn.Linear] = []
         if self._init_state_dict is not None:
             raise NotImplementedError
-        else:
-            layer_idx: int
-            d_in: int
-            for layer_idx, d_in in enumerate(self._shape_wo_bias[:-1]):
-                d_out: int = self._shape_wo_bias[layer_idx + 1]
-                layer: nn.Linear = nn.Linear(d_in, d_out, bias=self._has_bias, dtype=torch.float64)
-                self._init_fn(layer.weight, layer_idx=layer_idx)
-                self._layers.append(layer)
-                self.add_module(f'{constants.net.LAYER_NAME_PREFIX}{layer_idx + 1}', layer)
+        layer_idx: int
+        d_in: int
+        for layer_idx, d_in in enumerate(self._shape_wo_bias[:-1]):
+            d_out: int = self._shape_wo_bias[layer_idx + 1]
+            layer: nn.Linear = nn.Linear(d_in, d_out, bias=self._has_bias, dtype=torch.float64)
+            self._init_fn(layer.weight, layer_idx=layer_idx)
+            self._layers.append(layer)
+            self.add_module(f'{constants.net.LAYER_NAME_PREFIX}{layer_idx + 1}', layer)
         logging.basicConfig(level=logging.INFO_IR)
         logging.info_ir(f'new net; init weights with init_fn: {self._init_fn}')
 

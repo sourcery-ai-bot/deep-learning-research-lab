@@ -61,10 +61,10 @@ def main():
     all_simulation_final_results_ids: List[ObjectRef[OrderedDict[str, float]]] = []
     df_all_simulation_final_results: pd.DataFrame = pd.DataFrame()
     # Spawn multiple workers
-    for i, random_seed in enumerate(range(
+    for random_seed in range(
             hyperparams.random.SEED_OFFSET,
             hyperparams.random.SEED_OFFSET + hyperparams.training.NUM_OF_SIMULATORS
-    )):
+    ):
         simulator_artifacts_dirpath: Path = hyperparams.env.CURR_ARTIFACTS_DIRPATH / f'rseed_{random_seed:03d}'
         if hyperparams.parser_args.only_agg is False:
             simulator_artifacts_dirpath.mkdir(parents=True)
@@ -77,7 +77,7 @@ def main():
             all_simulation_final_results_ids.append(simulation_final_results_id)
     if hyperparams.parser_args.only_agg is False:
         # Get all final results
-        while len(all_simulation_final_results_ids) > 0:
+        while all_simulation_final_results_ids:
             simulation_final_results_id: ObjectRef[OrderedDict[str, float]] = all_simulation_final_results_ids.pop()
             simulation_final_results: OrderedDict[str, float] = ray.get(simulation_final_results_id)
             df_all_simulation_final_results = df_all_simulation_final_results.append(

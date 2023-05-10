@@ -64,8 +64,8 @@ class SimulationVisualizer:
 
             # F2S Ratio
             title_final_f2s: str = \
-                f'Final f2s: {self._get_f2s_title(frame_idx=-1)}' \
-                f' || First f2s: {self._get_f2s_title(frame_idx=0)}'
+                    f'Final f2s: {self._get_f2s_title(frame_idx=-1)}' \
+                    f' || First f2s: {self._get_f2s_title(frame_idx=0)}'
             wrapper_title = textwrap.TextWrapper(width=115)
             axd['f2s'].set_title(wrapper_title.fill(title_final_f2s))
             df_model_f2s_track: pd.DataFrame = pd.DataFrame.from_records(
@@ -84,7 +84,7 @@ class SimulationVisualizer:
 
             # Loss
             title_loss: str = f'Final loss = {self._simulation_analyzer.track.get_loss_of_frame(frame_idx=-1):.3e}' \
-                              f' || First loss = {self._simulation_analyzer.track.get_loss_of_frame(frame_idx=0):.3e}'
+                                  f' || First loss = {self._simulation_analyzer.track.get_loss_of_frame(frame_idx=0):.3e}'
             axd['loss'].set_title(title_loss)
             df_loss_track: pd.DataFrame = pd.DataFrame(
                 self._simulation_analyzer.track.loss_track,
@@ -155,7 +155,7 @@ class SimulationVisualizer:
                         mtx=layer, row_name=neuron_name, color=layer_color, ax=axd['simulation']
                     )
                     is_layer_square_mtx: bool = (layer.shape[0] == 2) and (layer.shape[1] == 2)
-                    if is_layer_square_mtx is True:
+                    if is_layer_square_mtx:
                         layer_image: np.ndarray = self._simulation_analyzer.get_mtx_image(mtx=layer)
                         self._plot_mtx_image(mtx_image=layer_image, mtx_name=layer_name, color=layer_color,
                                              ax=axd['simulation'])
@@ -169,7 +169,7 @@ class SimulationVisualizer:
             frame_f2s.pop('X')
         gif_filepath: Path = self._artifacts_dirpath / 'simulation.gif'
         single_frame_duration_in_sec: float = \
-            constants.gif.total_duration / self._simulation_analyzer.track.num_of_frames
+                constants.gif.total_duration / self._simulation_analyzer.track.num_of_frames
         with imageio.get_writer(gif_filepath, mode='I', duration=single_frame_duration_in_sec) as writer:
             filenames: List[str]
             for i in range(self._simulation_analyzer.track.num_of_frames):

@@ -48,10 +48,10 @@ class AggregatingVisualizer:
             self,
             less_than_losses: Optional[List[float]] = None
     ) -> str:
-        ret: str = f'Final losses:'
+        ret: str = 'Final losses:'
         num_of_simulations_with_same_loss_treshold: int = 1
         equal_to_losses: List[float] = \
-            (
+                (
                     self._df_final_results[constants.agg.LAST_RVALUED_LOSS_COLUMN_NAME].value_counts() >
                     num_of_simulations_with_same_loss_treshold
             ).index[self._df_final_results[constants.agg.LAST_RVALUED_LOSS_COLUMN_NAME].value_counts() >
@@ -63,26 +63,26 @@ class AggregatingVisualizer:
             equal_to_loss: float = equal_to_losses[idx_equal_to] if idx_equal_to < len(equal_to_losses) else np.inf
             if less_than_loss <= equal_to_loss:
                 simulations_with_loss_less_than: pd.DataFrame = \
-                    self._get_simulations_with_final_loss_less_than(less_than_loss)
+                        self._get_simulations_with_final_loss_less_than(less_than_loss)
                 num_of_simulations: int = len(simulations_with_loss_less_than)
                 ret += '{:50s}'.format(f'\nThere are {num_of_simulations} simulations '
                                        f'with {self._hyperparams.training.LOSS_FN} < {less_than_loss:.3e}.')
                 if num_of_simulations > 0:
                     worst_loss: float = \
-                        simulations_with_loss_less_than[constants.agg.LAST_RVALUED_LOSS_COLUMN_NAME].max()
+                            simulations_with_loss_less_than[constants.agg.LAST_RVALUED_LOSS_COLUMN_NAME].max()
                     ret += f' Among them, the worst simulation has' \
-                           f' {self._hyperparams.training.LOSS_FN} < {worst_loss:.3e}.'
+                               f' {self._hyperparams.training.LOSS_FN} < {worst_loss:.3e}.'
                 idx_less_than += 1
             else:
                 num_of_simulations: int = len(self._get_simulations_with_final_loss_equal_to(equal_to_loss))
                 ret += f'\nThere are {num_of_simulations} simulations' \
-                       f' with {self._hyperparams.training.LOSS_FN} = {equal_to_loss:.3e}.'
+                           f' with {self._hyperparams.training.LOSS_FN} = {equal_to_loss:.3e}.'
                 idx_equal_to += 1
-        if len(equal_to_losses) > 0:
+        if equal_to_losses:
             largest_loss: float = equal_to_losses[-1]
             num_of_simulations = len(self._get_simulations_with_final_loss_greater_than(largest_loss))
             ret += f'\nThere are {num_of_simulations} simulations with ' \
-                   f'{self._hyperparams.training.LOSS_FN} > {largest_loss:.3e}.'
+                       f'{self._hyperparams.training.LOSS_FN} > {largest_loss:.3e}.'
         return ret
 
     def _displot_final_losses(self) -> None:

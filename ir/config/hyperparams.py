@@ -100,7 +100,7 @@ class Data(_Hyperparamers):
         self.TEACHER_DEPTH: int = args.teacher_depth
         self.TEACHER_WIDTH: int = args.teacher_width
         self.IS_TEACHER_DATASET: bool = (self.TEACHER_DEPTH > 0) or (self.TEACHER_WIDTH > 0)
-        if self.IS_TEACHER_DATASET is True:
+        if self.IS_TEACHER_DATASET:
             assert all((self.TEACHER_DEPTH > 0, self.TEACHER_WIDTH > 0))
         self.TEACHER_HAS_BIAS: bool = False
         self.NUM_OF_DATAPOINTS: int = args.num_of_datapoints

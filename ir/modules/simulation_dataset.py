@@ -70,12 +70,10 @@ def get_simulation_dataset(hyperparams: Hyperparams) -> SimulationDataset:
 
 
 def get_deterministic_labels(hyperparams: Hyperparams) -> Tensor:
-    if hyperparams.net.LABEL_DIM == 1:
+    if hyperparams.net.LABEL_DIM == 1 or hyperparams.net.LABEL_DIM != 2:
         raise NotImplementedError
-    elif hyperparams.net.LABEL_DIM == 2:
-        return torch.eye(2, dtype=torch.float64)
     else:
-        raise NotImplementedError
+        return torch.eye(2, dtype=torch.float64)
 
 
 def get_random_labels(hyperparams: Hyperparams) -> Tensor:

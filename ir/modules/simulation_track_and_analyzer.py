@@ -117,16 +117,15 @@ class SimulationAnalyzer:
         :return: The index of the last frame that contains a real valued loss. Namely, not a nan.
                  If all frames have nan, return `-1`. If all frames don't have nan, return `num_of_frames-1`.
         """
-        if self._idx_of_last_rvalued_frame is None:
-            idx_of_first_nan_frame: int = self.track.num_of_frames
-            loss_is_nan: Tensor = self.track.loss_track.isnan().nonzero()
-            try:
-                idx_of_first_nan_frame = loss_is_nan[0].item()
-            except IndexError:
-                pass
-            return idx_of_first_nan_frame - 1
-        else:
+        if self._idx_of_last_rvalued_frame is not None:
             return self._idx_of_last_rvalued_frame
+        idx_of_first_nan_frame: int = self.track.num_of_frames
+        loss_is_nan: Tensor = self.track.loss_track.isnan().nonzero()
+        try:
+            idx_of_first_nan_frame = loss_is_nan[0].item()
+        except IndexError:
+            pass
+        return idx_of_first_nan_frame - 1
 
     def get_model_f2s_of_frame(self, frame_idx: int) -> typing.OrderedDict[str, float]:
         return self.model_f2s_track[frame_idx]
